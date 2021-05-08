@@ -1,0 +1,33 @@
+{
+  "name": "api-graphql-products",
+  "version": "1.0.0",
+  "description": "Crud of products",
+  "main": "build/server.ts ",
+  "repository": "https://github.com/keelviinn/graphql-api-products.git",
+  "author": "Kelvin Oliveira <keelviinn@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build-ts": "rimraf build && tsc",
+    "postinstall": "npm run build-ts",
+    "start": "npm run serve",
+    "serve": "node build/server.js",
+    "watch-node": "nodemon build/server.js",
+    "watch-ts": "tsc -w",
+    "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts"
+  },
+  "dependencies": {
+    "apollo-server": "^2.24.0",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.5.0",
+    "mongoose": "^5.12.7",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.10.5",
+    "@types/node": "^15.0.2",
+    "ts-loader": "^9.1.2"
+  }
+}
