@@ -1,0 +1,1 @@
+export { fileTypeDefs, fileMutationsTypeDefs } from './file';

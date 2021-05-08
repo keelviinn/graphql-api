@@ -1,0 +1,1 @@
+export { productQueries, productMutations } from './product'
