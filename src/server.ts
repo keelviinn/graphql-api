@@ -7,8 +7,8 @@ import typeDefs from './typeDefs';
 
 const 
 	ENVIRONMENT = process.env.ENVIRONMENT,
-	MONGO_DB_URL: string = process.env.MONGO_DB_URL || '',
-	PORT = process.env.PORT || 4000
+	PORT = process.env.PORT || 4000,
+	DB: any = process.env.NODE_ENV == 'production' ? process.env.DATABASE_PROD : process.env.DATABASE_DEV;
 
 const server = new ApolloServer({ 
 	typeDefs, 
@@ -19,6 +19,6 @@ const server = new ApolloServer({
 
 server.listen({ port: PORT, tracing: true }).then(({ url }) => console.log(`🚀  Server ready at ${url}`));
 
-mongoose.connect(MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+mongoose.connect(DB, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 	.then(() => console.log(`Connection to database successful on ${ENVIRONMENT} enviroment`))
 	.catch((err) => console.error(err));
