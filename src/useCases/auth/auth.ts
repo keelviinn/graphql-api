@@ -22,7 +22,8 @@ class Auth {
     const passwordMatch = await compare(password, user.password);
     if (!passwordMatch) return new AppError('user or password incorrect!', 401);
     const generateToken = new GenerateToken();
-    const token = generateToken.execute(user._id);
+    const userDetails = { name: user.name, email: user.email, role: user.role}
+    const token = generateToken.execute(userDetails, user._id);
     const generateRefreshToken = new GenerateRefreshToken();
     const refreshToken = await generateRefreshToken.execute(user._id);
     return { token, refreshToken };
