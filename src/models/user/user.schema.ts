@@ -21,7 +21,7 @@ const UserSchema: Schema = new mongoose.Schema({
     required: [true, 'Email cannot be empty'],
     trim: true,
     lowercase: true,
-    validate: [validator.isEmail],
+    // validator: [validator.isEmail],
   },
   authLoginToken: { type: String, select: false },
   authLoginExpires: { type: Date, select: false },

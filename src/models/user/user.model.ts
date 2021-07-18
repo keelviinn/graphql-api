@@ -14,12 +14,13 @@ export default interface User extends Document {
 	_id: any;
 	name: string;
 	email: string;
-  authLoginToken: string;
-  authLoginExpires: Date;
+  authLoginToken: string | undefined;
+  authLoginExpires: Date | undefined;
   refreshTokens: RefreshToken[];
   active: boolean;
   role: string;
 	coverURL: string;
+  createAuthToken(): any;
 	createdAt: string;
 	updatedAt: string;
 };
