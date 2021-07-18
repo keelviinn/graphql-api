@@ -9,13 +9,25 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const resolvers_1 = __importDefault(require("./resolvers"));
 const typeDefs_1 = __importDefault(require("./typeDefs"));
-const ENVIRONMENT = process.env.ENVIRONMENT, PORT = process.env.PORT || 4000, DB = process.env.NODE_ENV == 'production' ? process.env.DATABASE_PROD : process.env.DATABASE_DEV;
+const ENVIRONMENT = process.env.NODE_ENV, PORT = process.env.PORT || 4000, DB = process.env.NODE_ENV == 'production' ? process.env.DATABASE_PROD : process.env.DATABASE_DEV;
+const context = async ({ req, connection }) => {
+    if (!!connection) {
+        return { connection };
+    }
+    if (!req || !req.headers) {
+        return "";
+    }
+    const authorization = req.headers.authorization || "";
+    return { authorization };
+};
 async function startServer() {
-    const server = new apollo_server_express_1.ApolloServer({ typeDefs: typeDefs_1.default, resolvers: resolvers_1.default, introspection: true, playground: true, context: ({ req, connection, res }) => ({
-            req,
-            connection,
-            res,
-        }), });
+    const server = new apollo_server_express_1.ApolloServer({
+        typeDefs: typeDefs_1.default,
+        resolvers: resolvers_1.default,
+        introspection: true,
+        playground: true,
+        context
+    });
     await server.start();
     const app = express_1.default();
     server.applyMiddleware({ app });

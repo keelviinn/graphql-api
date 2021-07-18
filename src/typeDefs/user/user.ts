@@ -7,9 +7,9 @@ export const User = `
     _id: String
     name: String
     email: String
+    password: String
     authLoginToken: String
     authLoginExpires: Date
-    refreshTokens: [RefreshToken]
     active: Boolean
     role: String
     coverURL: String
@@ -37,17 +37,14 @@ export const user = `
 export const addUser = `
   addUser(
     name: String
-    price: Float
-    coverURL: String
+    email: String
+    password: String
   ): User
 `
 
 export const updateUser = `
   updateUser(
     _id: String
-    name: String
-    price: Float
-    coverURL: String
   ): User
 `
 

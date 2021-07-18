@@ -3,7 +3,8 @@ import { Mutations } from './mutations';
 import { productTypeDefs } from './product';
 import { showcaseTypeDefs } from './showcase';
 import { userTypeDefs } from './user';
-import { refreshTokenTypeDefs } from './auth';
+import { authTypeDefs } from './auth';
+  
  
 const typeDefs = `
 ${Queries}
@@ -11,6 +12,6 @@ ${Mutations}
 ${productTypeDefs}
 ${showcaseTypeDefs}
 ${userTypeDefs}
-${refreshTokenTypeDefs}
+${authTypeDefs}
 ` 
 export default typeDefs;

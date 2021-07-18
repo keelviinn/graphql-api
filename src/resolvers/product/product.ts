@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 import Product from '../../models/product/product.schema';
 import Showcase from '../../models/showcase/showcase.schema';
 import ShowcaseModel from '../../models/showcase/showcase.model';
+import verifyAuth from '../../middlewares/verifyAuth';
 
 export const products = async  (parent: any, args: any, context: any) => {
-  try {
-    const products = await Product.find();
-    return { list: products }    
-  } catch (error) { console.error(error); throw new Error(error); }
+  verifyAuth(context.authorization) 
+  const products = await Product.find();
+  return { list: products }    
 };
 
 export const product = async (parent: any, args: any, context: any) => {

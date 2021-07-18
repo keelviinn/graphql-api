@@ -1,1 +1,1 @@
-export { refreshTokenTypeDefs, refreshTokenQueries, refreshTokenMutations } from './auth';
+export { authTypeDefs, authMutations } from './auth';

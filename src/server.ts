@@ -3,10 +3,9 @@ require('dotenv').config();
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import mongoose from 'mongoose';
-import httpHeadersPlugin from 'apollo-server-plugin-http-headers';
 import resolvers from './resolvers';
 import typeDefs from './typeDefs';
-import Protect from './utils/protect';
+import verifyAuth from './middlewares/verifyAuth';
 
 const 
 	ENVIRONMENT = process.env.NODE_ENV,
@@ -15,11 +14,9 @@ const
 
 const context = async ({ req, connection }) => {
 	if (!!connection) { return { connection } }
-	if (!req?.cookies && !req?.cookies?.accessToken ) { return { setCookies: new Array(), setHeaders: new Array() } }
-	const authorization = req.cookies.accessToken || "";
-	const user = Protect(authorization);
-	const cookies = req?.cookies;
-	return { user, cookies, authorization, setCookies: new Array(), setHeaders: new Array() }
+	if (!req || !req.headers ) { return "" }
+	const authorization = req.headers.authorization || "";
+	return { authorization }
 }
 
 async function startServer() {
@@ -28,7 +25,6 @@ async function startServer() {
 		resolvers, 
 		introspection: true, 
 		playground: true, 
-		plugins: [httpHeadersPlugin],
 		context
 	});
 	await server.start();
