@@ -1,12 +1,14 @@
+import { hash } from 'bcryptjs';
 import User from '../../models/user/user.schema';
 import AppError from '../../utils/appError';
 import filterObj from '../../utils/filterObj';
-import { CreateUser } from '../../useCases/createUser/createUser';
 
 const addUser = async (parent: any, args: any, context: any) => {
   const { name, email, password } = args;
-  const createUser = new CreateUser();
-  const user = createUser.execute({ name, email, password });
+  if (!!await User.findOne({ email })) return new AppError('User already exists!', 401);
+  const passwordHashed = await hash(password, 8)
+  const user = new User({ name, email, password: passwordHashed })
+  await user.save();
   return user;
 }
 
