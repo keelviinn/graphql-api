@@ -25,7 +25,6 @@ async function startServer() {
         typeDefs: typeDefs_1.default,
         resolvers: resolvers_1.default,
         introspection: true,
-        playground: true,
         context
     });
     await server.start();

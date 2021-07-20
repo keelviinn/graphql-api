@@ -11,7 +11,8 @@ const
 	ENVIRONMENT = process.env.NODE_ENV,
 	PORT = process.env.PORT || 4000,
 	DB: any = process.env.NODE_ENV == 'production' ? process.env.DATABASE_PROD : process.env.DATABASE_DEV;
-
+	
+const app = express();
 const context = async ({ req, connection }) => {
 	if (!!connection) { return { connection } }
 	if (!req || !req.headers ) { return "" }
@@ -20,16 +21,8 @@ const context = async ({ req, connection }) => {
 }
 
 async function startServer() {
-	const server = new ApolloServer({ 
-		typeDefs, 
-		resolvers, 
-		introspection: true, 
-		playground: true, 
-		context
-	});
+	const server = new ApolloServer({ typeDefs, resolvers, introspection: true, context	});
 	await server.start();
-
-	const app = express();
   server.applyMiddleware({ app });
 
 	await new Promise((resolve: any) => app.listen({ port: PORT }, resolve()));
