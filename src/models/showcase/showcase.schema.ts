@@ -6,6 +6,7 @@ const ShowcaseSchema: Schema = new Schema({
 	products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
 	percent: { type: String },
 	coverURL: { type: String },
+	company: { type: String },
 }, { timestamps: {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
