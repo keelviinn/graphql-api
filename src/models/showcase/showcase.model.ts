@@ -5,6 +5,7 @@ export default interface Showcase extends Document {
 	products: string[];
 	percent: number;
 	coverURL: string;
+	company: string;
 	createdAt: string;
 	updatedAt: string;
 };

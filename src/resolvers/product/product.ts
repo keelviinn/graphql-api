@@ -5,13 +5,15 @@ import ShowcaseModel from '../../models/showcase/showcase.model';
 import verifyAuth from '../../middlewares/verifyAuth';
 
 export const products = async  (parent: any, args: any, context: any) => {
-  verifyAuth(context.authorization) 
+  // const { role } = verifyAuth(context.authorization) 
+  // if (role !== 'user') throw new Error("Voce nao tem permissao");
   const products = await Product.find();
   return { list: products }    
 };
 
 export const product = async (parent: any, args: any, context: any) => {
   try {
+    if (!args._id) throw new Error('Id must be provided.');
     return await Product.findById(args._id);
   } catch (error) { console.error(error); throw new Error(error); } 
 };
