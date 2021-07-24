@@ -7,7 +7,7 @@ import { GenerateToken } from "../../provider/GenerateToken";
 import { GenerateRefreshToken } from '../../provider/GenerateRefreshToken';
 import AppError from '../../utils/appError';
 
-const auth = async (parent: any, args: any, context: any) => {
+const login = async (parent: any, args: any, context: any) => {
   const { email, password } = args;
   const user = await User.findOne({ email });
   if (!user) return new AppError('user or password incorrect!', 401);
@@ -37,4 +37,4 @@ const refreshToken = async (parent: any, args: any, context: any) => {
 }
 
 export const authQueries = {  };
-export const authMutations = { auth, refreshToken };
+export const authMutations = { login, refreshToken };

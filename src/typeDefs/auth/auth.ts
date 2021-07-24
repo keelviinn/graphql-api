@@ -15,8 +15,8 @@ export const Auth = `
   }
 `;
 
-const auth = `
-  auth(email: String password: String): Auth
+const login = `
+  login(email: String password: String): Auth
 `;
 
 const refreshToken = `
@@ -29,6 +29,6 @@ export const authTypeDefs = `
 `;
 
 export const authMutations = `
-  ${auth}
+  ${login}
   ${refreshToken}
 `;
