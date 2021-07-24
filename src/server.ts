@@ -5,6 +5,7 @@ import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { ApolloServer } from 'apollo-server-express';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import express from 'express';
 import mongoose from 'mongoose';
 import resolvers from './resolvers';
@@ -27,7 +28,9 @@ const context = async ({ req, connection }) => {
 
 async function startServer() {
 	const schema = makeExecutableSchema({ typeDefs, resolvers });
-	const server = new ApolloServer({ schema, introspection: true, context	});
+	const server = new ApolloServer({ schema, introspection: true, context, plugins: [
+    ApolloServerPluginLandingPageLocalDefault(),
+  ]});
 	await server.start();
 	server.applyMiddleware({ app, path: "/" });
 	
