@@ -45,6 +45,10 @@ export const addUser = `
 export const updateUser = `
   updateUser(
     _id: String
+    email: String
+    name: String
+    password: String
+    coverURL: String
   ): User
 `
 

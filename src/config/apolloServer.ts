@@ -8,7 +8,7 @@ import express from 'express';
 import resolvers from '../resolvers';
 import typeDefs from '../typeDefs';
 
-const context = async ({ req, connection }) => {
+const context = async ({ req, connection }: any) => {
 	if (!!connection) { return { connection } }
 	if (!req || !req.headers ) { return "" }
 	const authorization = req.headers.authorization || "";
