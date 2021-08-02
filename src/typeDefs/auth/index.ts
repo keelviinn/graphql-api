@@ -1,1 +1,1 @@
-export { authTypeDefs, authMutations } from './auth';
+export { authTypeDefs, authQueries, authMutations } from './auth';

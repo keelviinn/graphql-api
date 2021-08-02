@@ -1,10 +1,12 @@
-import { sign } from 'jsonwebtoken';
+import { AuthenticationError } from 'apollo-server-express';
+import { add } from 'date-fns';
+import { sign, verify } from 'jsonwebtoken';
 
 const appSecret: any = process.env.APP_SECRET
 
 class GenerateToken {
-  execute(userDetails: any, userId: string): string {
-    return sign({...userDetails}, appSecret, { subject: userId.toString(), expiresIn: '1d' });
+  generate(userDetails: any, userId: string): string {
+    return sign({...userDetails }, appSecret, { subject: userId.toString(), expiresIn: 60 * 15 });
   }
 }
 
