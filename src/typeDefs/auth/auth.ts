@@ -11,13 +11,13 @@ export const RefreshToken = `
 export const Auth = `
   type Auth {
     token: String
-    role: String
     refreshToken: String
+    user: User
   }
 `;
 
-const getCurrentUser = `
-  getCurrentUser: User
+const currentUser = `
+  currentUser: User
 `;
 
 const login = `
@@ -30,7 +30,7 @@ export const authTypeDefs = `
 `;
 
 export const authQueries = `
-  ${getCurrentUser}
+  ${currentUser}
 `;
 
 export const authMutations = `

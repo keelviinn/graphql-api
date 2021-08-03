@@ -13,8 +13,8 @@ export default async function verifyAuth(authToken: string): Promise<User | Auth
   // if (!authToken) throw new AuthenticationError("Token must be provided");
   try {
     const auth: any = verify(authToken, appSecret); 
-    const getCurrentUserProvider = new GetCurrentUser();
-    const user = await getCurrentUserProvider.findUser(auth.sub);
+    const currentUserProvider = new GetCurrentUser();
+    const user = await currentUserProvider.findUser(auth.sub);
     if (!user) throw new AuthenticationError("User not founded");
     return user;
   } catch (error) {

@@ -8,7 +8,7 @@ import { GenerateToken } from "../../provider/GenerateToken";
 import { GenerateRefreshToken } from '../../provider/GenerateRefreshToken';
 import verifyAuth from '../../middlewares/verifyAuth';
 
-const getCurrentUser = async (_: any, __: any, { auth }: any) => {
+const currentUser = async (_: any, __: any, { auth }: any) => {
   const user = await verifyAuth(auth);
   return user;
 }
@@ -24,7 +24,7 @@ const login = async (_: any, args: any) => {
   const token = generateToken.generate(userDetails, user._id);
   const generateRefreshToken = new GenerateRefreshToken();
   const refreshToken = await generateRefreshToken.execute(user._id);
-  return { token, role: user.role, refreshToken: refreshToken };
+  return { token, user, refreshToken: refreshToken };
 }
 
 export const refreshToken = async (req: any, res: any): Promise<any> => {
@@ -37,10 +37,10 @@ export const refreshToken = async (req: any, res: any): Promise<any> => {
   if (!!isAfter(new Date(), refreshToken?.expiration)) {
     const generateRefreshToken = new GenerateRefreshToken();
     const newRefreshToken = await generateRefreshToken.execute(user._id);
-    return res.status(201).json({ token, refreshToken: newRefreshToken, role: user?.role });
+    return res.status(201).json({ token, refreshToken: newRefreshToken, user });
   }    
-  return res.status(201).send({ token, refreshToken: refreshToken._id, role: user?.role });
+  return res.status(201).send({ token, refreshToken: refreshToken._id, user });
 }
 
-export const authQueries = { getCurrentUser };
+export const authQueries = { currentUser };
 export const authMutations = { login };
