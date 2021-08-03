@@ -11,16 +11,17 @@ export const RefreshToken = `
 export const Auth = `
   type Auth {
     token: String
-    refreshToken: RefreshToken
+    refreshToken: String
+    user: User
   }
+`;
+
+const currentUser = `
+  currentUser: User
 `;
 
 const login = `
   login(email: String password: String): Auth
-`;
-
-const refreshToken = `
-  refreshToken(refresh_token: String): Auth
 `;
 
 export const authTypeDefs = `
@@ -28,7 +29,10 @@ export const authTypeDefs = `
   ${Auth}
 `;
 
+export const authQueries = `
+  ${currentUser}
+`;
+
 export const authMutations = `
   ${login}
-  ${refreshToken}
 `;

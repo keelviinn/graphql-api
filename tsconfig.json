@@ -1,20 +1,41 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
+    "target": "es2019",
+    "moduleResolution": "node",
     "module": "commonjs",
-    "allowJs": true,
+    "lib": ["es2019"],
     "sourceMap": true,
-    "outDir": "./build",
-    "rootDir": "./src",
-    "strict": true,                         
-    "noImplicitAny": false,                   
-    "typeRoots": [
-      "../node_modules/@types",
-      "../@types"
-    ],
-    "types": ["node"],
+    "outDir": "build",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "resolveJsonModule": true,
+    "alwaysStrict": true,
+    "removeComments": true,
+    "noImplicitReturns": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@test/*": ["test/*"]
+    },
+    "rootDirs": [
+      "./src",
+      "test"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "./src/**/*.ts",
+    "test/**/*.ts", 
+    "jest.config.js"  
+  ],
+  "exclude": [
+    "./node_modules/*",
+    "build"
+  ]
 }

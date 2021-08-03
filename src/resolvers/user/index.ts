@@ -1,1 +1,1 @@
-export { userMutations } from './user'
+export { userQueries, userMutations } from './user'
