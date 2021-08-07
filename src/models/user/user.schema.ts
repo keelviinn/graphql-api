@@ -1,4 +1,7 @@
+// @ts-ignore
+
 import mongoose, { Schema } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 import validator from 'validator';
 import User from './user.model'
 
@@ -21,5 +24,7 @@ const UserSchema: Schema = new mongoose.Schema({
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 }});
+
+UserSchema.plugin(mongoosePaginate);
 
 export default mongoose.model<User>('User', UserSchema);

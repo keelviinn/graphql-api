@@ -38,6 +38,8 @@ export const addUser = `
     name: String
     email: String
     password: String
+    coverURL: String
+    role: String
   ): User
 `
 
@@ -48,6 +50,7 @@ export const updateUser = `
     name: String
     password: String
     coverURL: String
+    role: String
   ): User
 `
 
