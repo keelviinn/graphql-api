@@ -3,15 +3,16 @@ import { ForbiddenError, UserInputError, ApolloError } from 'apollo-server-expre
 import User from '../../models/user/user.schema';
 import filterObj from '../../utils/filterObj';
 import verifyAuth from '../../middlewares/verifyAuth';
+import UserModel from '../../models/user/user.model';
+import { ContextReturn } from '../../config/apolloServer';
 
-const users = async (_: any, __: any, { auth }: any) => {
+const users = async (_: any, __: any, { auth }: ContextReturn) => {
   await verifyAuth(auth);
-  const options = { page: 1, limit: 10, collation: { locale: 'ptBR' } };
   const users = await User.find({}).sort({ _id: -1 }).limit(10);
   return { list: users }
 }
 
-const user = async (parent: any, { _id }: any, { auth }: any) => {
+const user = async (parent: any, { _id }: UserModel, { auth }: any) => {
   await verifyAuth(auth);
   return await User.findById(_id);
 }
