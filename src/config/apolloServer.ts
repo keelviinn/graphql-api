@@ -31,14 +31,13 @@ export default async function startServer() {
 	app.use('/refresh_token', (req, res) => refreshToken(req, res))
 
 	const httpServer = createServer(app);
-	const schema = makeExecutableSchema({ typeDefs, resolvers });
-  
-	const server = new ApolloServer({ schema, introspection: true, context });
-	
-	const subscriptionServer = SubscriptionServer.create(
-    { schema, execute, subscribe }, 
-    { server: httpServer, path: "/",  }
-  );
+
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context,
+    subscriptions: { path: '/' }
+  });
 		
-	return { server, app, httpServer, subscriptionServer };
+  return { app, httpServer, server }
 }
