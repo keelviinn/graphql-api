@@ -30,18 +30,22 @@ const login = async (_: any, args: any) => {
 }
 
 export const refreshToken = async (req: any, res: any): Promise<any> => {
-  const refreshToken = await RefreshToken.findById(req.body.refreshToken).populate('user');
-  if (!refreshToken) throw new AuthenticationError("RefreshToken not founded");
-  const user: UserModel = refreshToken?.user; 
-  const userDetails = { name: user?.name, role: user?.role}
-  const generateToken = new GenerateToken();
-  const token = generateToken.generate(userDetails, user?._id);
-  if (!!isAfter(new Date(), refreshToken?.expiration)) {
-    const generateRefreshToken = new GenerateRefreshToken();
-    const newRefreshToken = await generateRefreshToken.execute(user._id);
-    return res.status(201).json({ token, refreshToken: newRefreshToken, user });
-  }    
-  return res.status(201).send({ token, refreshToken: refreshToken._id, user });
+  try {
+    const refreshToken = await RefreshToken.findById(req.body.refreshToken).populate('user');
+    if (!refreshToken) return res.status(400).json({ error: 'RefreshToken not found!' });
+    const user: UserModel = refreshToken?.user; 
+    const userDetails = { name: user?.name, role: user?.role}
+    const generateToken = new GenerateToken();
+    const token = generateToken.generate(userDetails, user?._id);
+    if (!!isAfter(new Date(), refreshToken?.expiration)) {
+      const generateRefreshToken = new GenerateRefreshToken();
+      const newRefreshToken = await generateRefreshToken.execute(user._id);
+      return res.status(201).json({ token, refreshToken: newRefreshToken, user });
+    }    
+    return res.status(201).send({ token, refreshToken: refreshToken._id, user });    
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export const authQueries = { currentUser };
