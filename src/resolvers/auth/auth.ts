@@ -20,6 +20,7 @@ const login = async (_: any, args: any) => {
     if (!passwordMatch) throw new AuthenticationError('user or password incorrect!');
     const generateToken = new GenerateToken();
     const userDetails = { name: user.name, role: user.role};
+    console.log(user, email, password)
     const token = generateToken.generate(userDetails, user._id);
     const generateRefreshToken = new GenerateRefreshToken();
     const refreshToken = await generateRefreshToken.execute(user._id);
