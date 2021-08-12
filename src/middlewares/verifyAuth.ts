@@ -10,7 +10,6 @@ type Auth = {
 }
 
 export default async function verifyAuth(authToken: string): Promise<User | AuthenticationError> {
-  // if (!authToken) throw new AuthenticationError("Token must be provided");
   try {
     const auth: any = verify(authToken, appSecret); 
     const currentUserProvider = new GetCurrentUser();

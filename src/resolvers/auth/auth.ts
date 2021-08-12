@@ -8,10 +8,7 @@ import { GenerateToken } from "../../provider/GenerateToken";
 import { GenerateRefreshToken } from '../../provider/GenerateRefreshToken';
 import verifyAuth from '../../middlewares/verifyAuth';
 
-const currentUser = async (_: any, __: any, { auth }: any) => {
-  const user = await verifyAuth(auth);
-  return user;
-}
+const currentUser = async (_: any, __: any, { auth }: any) => await verifyAuth(auth);
 
 const login = async (_: any, args: any) => {
   const { email, password } = args;

@@ -1,7 +1,7 @@
 // @ts-ignore
 
 import mongoose, { Schema } from 'mongoose';
-import mongoosePaginate from 'mongoose-paginate-v2';
+import { mongoosePagination, Pagination } from "mongoose-paginate-ts";
 import validator from 'validator';
 import User from './user.model'
 
@@ -25,6 +25,10 @@ const UserSchema: Schema = new mongoose.Schema({
   updatedAt: 'updatedAt'
 }});
 
-UserSchema.plugin(mongoosePaginate);
+UserSchema.plugin(mongoosePagination);
 
-export default mongoose.model<User>('User', UserSchema);
+const User: any = mongoose.model<User | Pagination<User>>("User", UserSchema);
+
+export default User;
+
+// export default mongoose.model<User | Pagination<User>>('User', UserSchema);

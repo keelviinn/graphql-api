@@ -1,5 +1,6 @@
-import { Document } from 'mongoose';
-export default interface User extends Document {
+import mongoose from 'mongoose';
+
+type User = mongoose.Document & {
 	_id: any;
 	name: string;
 	email: string;
@@ -13,3 +14,5 @@ export default interface User extends Document {
 	createdAt: string;
 	updatedAt: string;
 };
+
+export default User;

@@ -6,10 +6,20 @@ import verifyAuth from '../../middlewares/verifyAuth';
 import UserModel from '../../models/user/user.model';
 import { ContextReturn } from '../../config/apolloServer';
 
-const users = async (_: any, __: any, { auth }: ContextReturn) => {
+const users = async (_: any, { page, limit, conteudistCompany }: any, { auth }: ContextReturn) => {
   await verifyAuth(auth);
-  const users = await User.find({}).sort({ _id: -1 }).limit(10);
-  return { list: users }
+
+  const options = {
+    query: { },
+    select: "name email role createdAt",
+    sort: { _id: -1 },
+    page,
+    populate: "",
+    limit,
+  };
+  
+  const users = await User.paginate(options);
+  return { docs: users.docs, paginateProps: users }
 }
 
 const user = async (parent: any, { _id }: UserModel, { auth }: any) => {
