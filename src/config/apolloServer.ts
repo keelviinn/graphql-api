@@ -14,7 +14,6 @@ export type ContextReturn = {
 }
 
 const context = ({ req }: any): undefined | ContextReturn => {
-	console.log(req)
 	if (!req || !req.headers ) return undefined;
 	const auth = req.headers.authorization || '';
 	return { auth }
