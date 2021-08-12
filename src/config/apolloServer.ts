@@ -1,8 +1,5 @@
 import cors from 'cors';
 import { createServer } from 'http';
-import { execute, subscribe } from 'graphql';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { makeExecutableSchema } from '@graphql-tools/schema';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import resolvers from '../resolvers';
@@ -20,7 +17,7 @@ const context = ({ req }: any): undefined | ContextReturn => {
 }
 
 var corsOptions = {
-  origin: process.env.CROSS_ORIGIN,
+  // origin: process.env.CROSS_ORIGIN,
   credentials: true 
 };
 
