@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { AuthenticationError, UserInputError } from 'apollo-server-express';
 import { isAfter } from 'date-fns';
 import { compare } from 'bcryptjs';
 import RefreshToken from '../../models/auth/refreshToken.schema';
@@ -12,12 +12,13 @@ const currentUser = async (_: any, __: any, { auth }: any) => await verifyAuth(a
 
 const login = async (_: any, args: any) => {
   const { email, password } = args;
+  if (!password) throw new UserInputError('password not provided!');
   const user = await User.findOne({ email });
   if (!user) throw new AuthenticationError('user or password incorrect!');
-  const passwordMatch = await compare(password, user.password);
+  const passwordMatch = await compare(password, password);
   if (!passwordMatch) throw new AuthenticationError('user or password incorrect!');
   const generateToken = new GenerateToken();
-  const userDetails = { name: user.name, role: user.role}
+  const userDetails = { name: user.name, role: user.role};
   const token = generateToken.generate(userDetails, user._id);
   const generateRefreshToken = new GenerateRefreshToken();
   const refreshToken = await generateRefreshToken.execute(user._id);
