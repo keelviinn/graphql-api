@@ -8,17 +8,14 @@ import { ContextReturn } from '../../config/apolloServer';
 
 const users = async (_: any, { page, limit, conteudistCompany }: any, { auth }: ContextReturn) => {
   await verifyAuth(auth);
-
-  const options = {
+  const users = await User.paginate({
     query: { },
     select: "name email role createdAt",
     sort: { _id: -1 },
     page,
     populate: "",
     limit,
-  };
-  
-  const users = await User.paginate(options);
+  });
   return { docs: users.docs, paginateProps: users }
 }
 

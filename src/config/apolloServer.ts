@@ -20,7 +20,7 @@ const context = ({ req }: any): undefined | ContextReturn => {
 }
 
 var corsOptions = {
-  // origin: process.env.CROSS_ORIGIN,
+  origin: process.env.CROSS_ORIGIN,
   credentials: true 
 };
 
