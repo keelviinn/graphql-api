@@ -33,6 +33,8 @@ export default async function startServer() {
     typeDefs,
     resolvers,
     context,
+    introspection: true,
+    playground: true,
     subscriptions: { path: '/' }
   });
 		
