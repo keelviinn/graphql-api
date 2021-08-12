@@ -5,17 +5,18 @@ import startMongoConnection from './config/mongoConnection';
 
 const PORT = process.env.PORT || 8080;
 
-startServer()
-	.then(async ({ server, app, httpServer }) => {
-		await server.start();
-		server.applyMiddleware({ app, path: "/" });
+(async () => {
+	await startServer().then(async ({ app, server, httpServer }) => {
+		server.applyMiddleware({ app, path: '/' });
+		server.installSubscriptionHandlers(httpServer);
 
 		httpServer.listen(PORT, () => {
-		  console.log(`Server is now running on http://localhost:${PORT}${server.graphqlPath}`)
-		  console.log(`WS is now running on ws://localhost:${PORT}${server.graphqlPath}`)
+			console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+			console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
 		});
-
-		await startMongoConnection();
 	});
+	
+	await startMongoConnection();
+})()
  
 
