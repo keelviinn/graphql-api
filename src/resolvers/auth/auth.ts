@@ -11,18 +11,22 @@ import verifyAuth from '../../middlewares/verifyAuth';
 const currentUser = async (_: any, __: any, { auth }: any) => await verifyAuth(auth);
 
 const login = async (_: any, args: any) => {
-  const { email, password } = args;
-  if (!password) throw new UserInputError('password not provided!');
-  const user = await User.findOne({ email });
-  if (!user) throw new AuthenticationError('user or password incorrect!');
-  const passwordMatch = await compare(password, password);
-  if (!passwordMatch) throw new AuthenticationError('user or password incorrect!');
-  const generateToken = new GenerateToken();
-  const userDetails = { name: user.name, role: user.role};
-  const token = generateToken.generate(userDetails, user._id);
-  const generateRefreshToken = new GenerateRefreshToken();
-  const refreshToken = await generateRefreshToken.execute(user._id);
-  return { token, user, refreshToken: refreshToken };
+  try {
+    const { email, password } = args;
+    if (!password) throw new UserInputError('password not provided!');
+    const user = await User.findOne({ email });
+    if (!user) throw new AuthenticationError('user or password incorrect!');
+    const passwordMatch = await compare(password, password);
+    if (!passwordMatch) throw new AuthenticationError('user or password incorrect!');
+    const generateToken = new GenerateToken();
+    const userDetails = { name: user.name, role: user.role};
+    const token = generateToken.generate(userDetails, user._id);
+    const generateRefreshToken = new GenerateRefreshToken();
+    const refreshToken = await generateRefreshToken.execute(user._id);
+    return { token, user, refreshToken: refreshToken };    
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export const refreshToken = async (req: any, res: any): Promise<any> => {
