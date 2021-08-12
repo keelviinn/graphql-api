@@ -19,14 +19,16 @@ export const User = `
 
 export const UserResult = `
   type UserResult {
-    list: [User]
-    totalPages: Int
-    totalCount: Int
+    docs: [User]
+    paginateProps: PaginateProps
   }
 `;
 
 export const users = `
-  users: UserResult
+  users (
+    page: Int
+    limit: Int
+  ): UserResult
 `
 
 export const user = `
@@ -38,6 +40,8 @@ export const addUser = `
     name: String
     email: String
     password: String
+    coverURL: String
+    role: String
   ): User
 `
 
@@ -48,6 +52,7 @@ export const updateUser = `
     name: String
     password: String
     coverURL: String
+    role: String
   ): User
 `
 

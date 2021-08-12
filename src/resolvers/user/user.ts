@@ -1,17 +1,28 @@
 import { hash } from 'bcryptjs';
 import { ForbiddenError, UserInputError, ApolloError } from 'apollo-server-express';
 import User from '../../models/user/user.schema';
-import AppError from '../../utils/appError';
 import filterObj from '../../utils/filterObj';
 import verifyAuth from '../../middlewares/verifyAuth';
+import UserModel from '../../models/user/user.model';
+import { ContextReturn } from '../../config/apolloServer';
 
-const users = async (_: any, __: any, { auth }: any) => {
+const users = async (_: any, { page, limit, conteudistCompany }: any, { auth }: ContextReturn) => {
   await verifyAuth(auth);
-  const users = await User.find({}).sort({ _id: -1 }).limit(10);
-  return { list: users }
+
+  const options = {
+    query: { },
+    select: "name email role createdAt",
+    sort: { _id: -1 },
+    page,
+    populate: "",
+    limit,
+  };
+  
+  const users = await User.paginate(options);
+  return { docs: users.docs, paginateProps: users }
 }
 
-const user = async (parent: any, { _id }: any, { auth }: any) => {
+const user = async (parent: any, { _id }: UserModel, { auth }: any) => {
   await verifyAuth(auth);
   return await User.findById(_id);
 }
@@ -29,12 +40,8 @@ const addUser = async (parent: any, args: any, context: any) => {
 const updateUser = async (parent: any, args: any, context: any) => {
   if (!args._id) return new ApolloError("_id must be provided!")
   const filteredBody = filterObj(args, 'name');
-  const user = await User.findById(args._id);
-  if (!user) return new ApolloError("user not found");
-  // const updatedUser = await User.findByIdAndUpdate(args.user._id, filteredBody, {
-  //   runValidators: false,
-  // });
-  return { status: 'success', data: { user } }
+  const user = await User.findByIdAndUpdate(args._id, { ...args });
+  return { user }
 };
 
 export const userQueries = { users, user };

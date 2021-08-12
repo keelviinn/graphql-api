@@ -9,14 +9,18 @@ import resolvers from '../resolvers';
 import typeDefs from '../typeDefs';
 import { refreshToken } from '../resolvers/auth/auth';
 
-const context = async ({ req }: any) => {
-	if (!req || !req.headers ) return { };
+export type ContextReturn = {
+	auth: string;
+}
+
+const context = ({ req }: any): undefined | ContextReturn => {
+	if (!req || !req.headers ) return undefined;
 	const auth = req.headers.authorization || '';
 	return { auth }
 }
 
 var corsOptions = {
-  origin: 'http://localhost:3000',
+  // origin: process.env.CROSS_ORIGIN,
   credentials: true 
 };
 

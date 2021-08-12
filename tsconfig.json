@@ -1,22 +1,22 @@
 {
   "compilerOptions": {
-    "target": "es2019",
+    "target":"ES2020",
     "moduleResolution": "node",
     "module": "commonjs",
-    "lib": ["es2019"],
+    "lib": ["es2020", "dom"],
     "sourceMap": true,
     "outDir": "build",
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "noImplicitThis": true,
+    "noImplicitThis": false,
     "resolveJsonModule": true,
     "alwaysStrict": true,
     "removeComments": true,
-    "noImplicitReturns": true,
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "noImplicitReturns": false,
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@src/*": ["./src/*"],
@@ -26,6 +26,8 @@
       "./src",
       "test"
     ],
+    "types": ["node", "jest"],
+    "typeRoots": [ "./node_modules/@types", "@types/alltypes.d.ts" ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },

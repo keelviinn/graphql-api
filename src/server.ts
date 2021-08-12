@@ -11,8 +11,8 @@ startServer()
 		server.applyMiddleware({ app, path: "/" });
 
 		httpServer.listen(PORT, () => {
-		  console.log(`Server is now running on http://localhost:${PORT}`)
-		  console.log(`WS is now running on ws://localhost:${PORT}`)
+		  console.log(`Server is now running on http://localhost:${PORT}${server.graphqlPath}`)
+		  console.log(`WS is now running on ws://localhost:${PORT}${server.graphqlPath}`)
 		});
 
 		await startMongoConnection();
