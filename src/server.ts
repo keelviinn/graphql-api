@@ -7,12 +7,12 @@ const PORT = process.env.PORT || 8080;
 
 (async () => {
 	await startServer().then(async ({ app, server, httpServer }) => {
-		server.applyMiddleware({ app, path: '/' });
-		server.installSubscriptionHandlers(httpServer);
+		await server.start();
+		server.applyMiddleware({ app });
 
 		httpServer.listen(PORT, () => {
 			console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
-			console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
+			console.log(`🚀 Websocket ready at ws://localhost:${PORT}${server.graphqlPath}`);
 		});
 	});
 	

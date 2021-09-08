@@ -1,7 +1,7 @@
 import { productQueries, productMutations } from './product';
 import { showcaseQueries, showcaseMutations } from './showcase';
 import { authQueries, authMutations } from './auth';
-import { userQueries, userMutations } from './user';
+import { userQueries, userMutations, userSubscriptions } from './user';
 
 const resolvers = {
 	Query: {
@@ -15,6 +15,9 @@ const resolvers = {
 		...showcaseMutations,
 		...authMutations,
 		...userMutations,
+	},
+	Subscription: {
+		...userSubscriptions,
 	}
 }
 
