@@ -26,14 +26,14 @@ const user = async (parent: any, { _id }: UserModel, { auth }: any) => {
 }
 
 const addUser = async (parent: any, args: any, { auth, pubsub }: ContextReturn) => {
-  await verifyAuth(auth);
+  // await verifyAuth(auth);
   const { name, email, password } = args;
   if (!!await User.findOne({ email })) return new ForbiddenError('User already exists!');  
   if (!args.password) return new UserInputError('Password wasn`t provided!');
   const passwordHashed = await hash(password, 8);
   const user = new User({ name, email, password: passwordHashed });
   await pubsub.publish(NEW_USER_ADDED, { userAdded: { ...user.toObject() } });
-  await user.save();
+  // await user.save();
   return user;
 }
 

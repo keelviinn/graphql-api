@@ -62,6 +62,10 @@ export const userAdded = `
   userAdded: User
 `;
 
+export const userConnection = `
+  userConnection: User
+`;
+
 export const userTypeDefs = `
   ${Date}
   ${User}
@@ -81,4 +85,5 @@ export const userMutations = `
 
 export const userSubscriptions = `
   ${userAdded}
+  ${userConnection}
 `;

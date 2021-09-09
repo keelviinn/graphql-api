@@ -5,11 +5,11 @@ import { SubscriptionServer } from "subscriptions-transport-ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { createServer } from 'http';
 import { ApolloServer } from 'apollo-server-express';
+import { refreshToken } from '../resolvers/auth/auth';
+import { pubsub } from './redisClient';
 import express from 'express';
 import resolvers from '../resolvers';
 import typeDefs from '../typeDefs';
-import { refreshToken } from '../resolvers/auth/auth';
-import { pubsub } from './redisClient';
 
 export type ContextReturn = {
 	auth: string;
