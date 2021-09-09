@@ -1,1 +1,1 @@
-export { userTypeDefs, userQueries, userMutations } from './user';
+export { userTypeDefs, userQueries, userMutations, userSubscriptions } from './user';

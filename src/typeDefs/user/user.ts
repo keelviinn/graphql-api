@@ -1,14 +1,12 @@
 export const Date = `
   scalar Date
-`
+`;
 
 export const User = `
   type User {
     _id: String
     name: String
     email: String
-    authLoginToken: String
-    authLoginExpires: Date
     active: Boolean
     role: String
     coverURL: String
@@ -29,11 +27,11 @@ export const users = `
     page: Int
     limit: Int
   ): UserResult
-`
+`;
 
 export const user = `
   user(_id: String): User
-`
+`;
 
 export const addUser = `
   addUser(
@@ -43,7 +41,7 @@ export const addUser = `
     coverURL: String
     role: String
   ): User
-`
+`;
 
 export const updateUser = `
   updateUser(
@@ -54,11 +52,19 @@ export const updateUser = `
     coverURL: String
     role: String
   ): User
-`
+`;
 
 export const removeUser = `
   removeUser(_id: String): Boolean
-`
+`;
+
+export const userAdded = `
+  userAdded: User
+`;
+
+export const userConnection = `
+  userConnection: User
+`;
 
 export const userTypeDefs = `
   ${Date}
@@ -75,4 +81,9 @@ export const userMutations = `
   ${addUser}
   ${updateUser}
   ${removeUser}
+`;
+
+export const userSubscriptions = `
+  ${userAdded}
+  ${userConnection}
 `;

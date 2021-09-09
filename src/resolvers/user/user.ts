@@ -5,8 +5,9 @@ import filterObj from '../../utils/filterObj';
 import verifyAuth from '../../middlewares/verifyAuth';
 import UserModel from '../../models/user/user.model';
 import { ContextReturn } from '../../config/apolloServer';
+import { NEW_USER_ADDED } from './user.subscription';
 
-const users = async (_: any, { page, limit, conteudistCompany }: any, { auth }: ContextReturn) => {
+const users = async (_: any, { page, limit }: any, { auth }: ContextReturn) => {
   await verifyAuth(auth);
   const users = await User.paginate({
     query: { },
@@ -24,13 +25,15 @@ const user = async (parent: any, { _id }: UserModel, { auth }: any) => {
   return await User.findById(_id);
 }
 
-const addUser = async (parent: any, args: any, context: any) => {
+const addUser = async (parent: any, args: any, { auth, pubsub }: ContextReturn) => {
+  // await verifyAuth(auth);
   const { name, email, password } = args;
   if (!!await User.findOne({ email })) return new ForbiddenError('User already exists!');  
   if (!args.password) return new UserInputError('Password wasn`t provided!');
-  const passwordHashed = await hash(password, 8)
-  const user = new User({ name, email, password: passwordHashed })
-  await user.save();
+  const passwordHashed = await hash(password, 8);
+  const user = new User({ name, email, password: passwordHashed });
+  await pubsub.publish(NEW_USER_ADDED, { userAdded: { ...user.toObject() } });
+  // await user.save();
   return user;
 }
 
