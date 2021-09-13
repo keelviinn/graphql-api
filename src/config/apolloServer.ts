@@ -1,26 +1,22 @@
-import cors from 'cors';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { execute, subscribe } from "graphql";
 import { SubscriptionServer } from "subscriptions-transport-ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { createServer } from 'http';
 import { ApolloServer } from 'apollo-server-express';
-import { refreshToken } from '../resolvers/auth/auth';
-import { pubsub } from './redisClient';
-import express from 'express';
+import express, { NextFunction, Response } from 'express';
+import cookieParser from "cookie-parser";
+import cors from 'cors';
 import resolvers from '../resolvers';
 import typeDefs from '../typeDefs';
+import { refreshTokens } from '../middlewares/refreshTokens';
 
 export type ContextReturn = {
 	auth: string;
   pubsub: RedisPubSub
 }
 
-const context = ({ req }: any): ContextReturn => {
-	if (!req || !req.headers ) return { auth: '', pubsub };
-	const auth: string = req.headers.authorization || '';
-	return { auth, pubsub }
-}
+const context = ({ req, res }: any): any => ({ req, res })
 
 const corsOptions = {
   // origin: process.env.CROSS_ORIGIN,
@@ -32,8 +28,10 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 export default async function startServer() {
   const app = express();
 	app.use(cors(corsOptions));
+  app.use(cookieParser());
   app.use(express.json({ limit: '5mb' }));  
-	app.use('/refresh_token', (req, res) => refreshToken(req, res))
+  app.use(async (req: any, res: Response, next: NextFunction) => await refreshTokens(req, res, next))
+	// app.use('/refresh_token', (req, res) => refreshToken(req, res))
 
 	const httpServer = createServer(app);
 
