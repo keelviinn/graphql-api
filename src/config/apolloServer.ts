@@ -10,7 +10,7 @@ import cors from 'cors';
 
 import resolvers from '../resolvers';
 import typeDefs from '../typeDefs';
-import { pubsub } from './redisClient'
+import { pubsub } from './pubsubConfig'
 import verifyAuth from '../middlewares/verifyAuth';
 import UserModel from '../models/user/user.model';
 
