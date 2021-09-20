@@ -17,7 +17,8 @@ const users = async (_: any, { page, limit }: any, { auth }: ContextReturn) => {
     populate: "",
     limit,
   });
-  return { docs: users.docs, paginateProps: users }
+  if (!users) throw new ApolloError('Error to paginate users', '400');
+  return { docs: users.docs, paginateProps: users };
 }
 
 const user = async (parent: any, { _id }: UserModel, { auth }: any) => {

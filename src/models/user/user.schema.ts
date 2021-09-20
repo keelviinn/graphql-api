@@ -1,9 +1,7 @@
-// @ts-ignore
-
 import mongoose, { Schema } from 'mongoose';
 import { mongoosePagination, Pagination } from "mongoose-paginate-ts";
 import validator from 'validator';
-import User from './user.model'
+import UserModel from './user.model'
 
 const UserSchema: Schema = new Schema({
   name: { type: String, trim: true },
@@ -27,6 +25,6 @@ const UserSchema: Schema = new Schema({
 }});
 
 UserSchema.plugin(mongoosePagination);
-const User: Pagination<User> = mongoose.model<User, Pagination<User>>("Contact", UserSchema);
+const User: Pagination<UserModel> = mongoose.model<UserModel, Pagination<UserModel>>("User", UserSchema);
 
 export default User;
