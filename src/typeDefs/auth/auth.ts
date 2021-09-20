@@ -29,7 +29,7 @@ const register = `
     email: String!
     name: String!
     password: String!
-  ): Boolean!
+  ): User
 `
 
 const login = `
@@ -37,10 +37,6 @@ const login = `
     email: String! 
     password: String!
   ): User
-`;
-
-const invalidTokens = `
-  invalidTokens: Boolean!
 `;
 
 export const authTypeDefs = `
@@ -56,5 +52,4 @@ export const authQueries = `
 export const authMutations = `
   ${register}
   ${login}
-  ${invalidTokens}
 `;

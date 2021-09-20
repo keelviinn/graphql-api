@@ -10,6 +10,8 @@ export const User = `
     active: Boolean
     role: String
     coverURL: String
+    accessToken: String
+    refreshToken: String
     createdAt: String
     updatedAt: String
   }

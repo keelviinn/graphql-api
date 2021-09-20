@@ -3,7 +3,7 @@ require('dotenv').config();
 import startServer from './config/apolloServer';
 import startMongoConnection from './config/mongoConnection';
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8001;
 
 (async () => {
 	await startServer().then(async ({ app, server, httpServer }) => {
