@@ -20,8 +20,23 @@ const currentUser = `
   currentUser: User
 `;
 
+const me = `
+  me: User
+`;
+
+const register = `
+  register(
+    email: String!
+    name: String!
+    password: String!
+  ): User
+`
+
 const login = `
-  login(email: String password: String): Auth
+  login(
+    email: String! 
+    password: String!
+  ): User
 `;
 
 export const authTypeDefs = `
@@ -31,8 +46,10 @@ export const authTypeDefs = `
 
 export const authQueries = `
   ${currentUser}
+  ${me}
 `;
 
 export const authMutations = `
+  ${register}
   ${login}
 `;

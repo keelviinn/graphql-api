@@ -5,7 +5,7 @@ import { mongoosePagination, Pagination } from "mongoose-paginate-ts";
 import validator from 'validator';
 import User from './user.model'
 
-const UserSchema: Schema = new mongoose.Schema({
+const UserSchema: Schema = new Schema({
   name: { type: String, trim: true },
   email: { 
     type: String,
@@ -19,16 +19,14 @@ const UserSchema: Schema = new mongoose.Schema({
   refreshTokens: { type: Schema.Types.ObjectId, ref: 'RefreshToken' },
   active: { type: Boolean, default: true, select: false },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
-  coverURL: { type: String, trim: true }
+  coverURL: { type: String, trim: true },
+  count: { type: Number, default: 0 }
 }, { timestamps: {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 }});
 
 UserSchema.plugin(mongoosePagination);
-
-const User: any = mongoose.model<User | Pagination<User>>("User", UserSchema);
+const User: Pagination<User> = mongoose.model<User, Pagination<User>>("Contact", UserSchema);
 
 export default User;
-
-// export default mongoose.model<User | Pagination<User>>('User', UserSchema);

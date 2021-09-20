@@ -1,38 +1,17 @@
-import { $$asyncIterator } from 'iterall';
-
-export const withStaticFields = (asyncIterator: AsyncIterator<any>, onStart: () => void): Function => {
-  return (rootValue: any, args: any, context: any, info: any): any => {
-    return {
-      next() {
-        return asyncIterator.next().then(({ value, done }) => {
-          console.log(value, done)
-          return { value: { ...value }, done };
-        });
-      },
-      return() {
-        return Promise.resolve({ value: undefined, done: true });
-      },
-      throw(error) {
-        return Promise.reject(error);
-      },
-      [$$asyncIterator]() {
-        return this;
-      },
-    };
-  };
-};
-
-export function onStart<T>(asyncIterator: AsyncIterator<T | undefined>, onStart: () => void) {
+export function withWatch<T>(asyncIterator: AsyncIterator<T | undefined>, onStart: () => void, onClosed: () => void): AsyncIterator<T | undefined> {
   return {
+    ...asyncIterator,
     next() {
-      return asyncIterator.next().then(({ value, done }) => {
-        console.log(value, done)
-        return { value: { ...value }, done };
-      });
+      onStart();
+      return asyncIterator.next ? asyncIterator.next() : Promise.resolve({ value: undefined, done: true });
+    },
+    return() {
+      onClosed();
+      return asyncIterator.return ? asyncIterator.return() : Promise.resolve({ value: undefined, done: true });
+    },
+    throw(err) {
+      console.error(err)
+      return asyncIterator.throw ? asyncIterator.throw() : Promise.resolve({ value: undefined, done: true });
     }
-  };
-}
-
-export async function onFinished<T>(asyncIterator: AsyncIterator<T | undefined>, onFinished: () => void) {
-  if (asyncIterator.return) onFinished();
+  }
 }

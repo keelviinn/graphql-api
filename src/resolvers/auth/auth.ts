@@ -1,52 +1,64 @@
-import { AuthenticationError, UserInputError } from 'apollo-server-express';
+import { ApolloError, AuthenticationError, UserInputError } from 'apollo-server-express';
+import * as bcrypt from "bcryptjs";
 import { isAfter } from 'date-fns';
 import { compare } from 'bcryptjs';
-import RefreshToken from '../../models/auth/refreshToken.schema';
-import User from '../../models/user/user.schema';
+
+import { generateAccessToken, generateRefreshToken } from '../../provider/generateTokens';
+import RefreshToken from '../../models/refreshToken/refreshToken.schema';
 import UserModel from '../../models/user/user.model';
-import { GenerateToken } from "../../provider/GenerateToken";
-import { GenerateRefreshToken } from '../../provider/GenerateRefreshToken';
-import verifyAuth from '../../middlewares/verifyAuth';
+import User from '../../models/user/user.schema';
 
-const currentUser = async (_: any, __: any, { auth }: any) => await verifyAuth(auth);
+const currentUser = async (_: any, __: any, { user }: any) => user;
 
-const login = async (_: any, args: any) => {
+const register = async (_: any, { email, name, password }) => {
   try {
-    const { email, password } = args;
-    if (!password) throw new UserInputError('password not provided!');
-    const user = await User.findOne({ email });
-    if (!user) throw new AuthenticationError('user or password incorrect!');
-    const passwordMatch = await compare(password, user.password);
-    if (!passwordMatch) throw new AuthenticationError('user or password incorrect!');
-    const generateToken = new GenerateToken();
-    const userDetails = { name: user.name, role: user.role};
-    const token = generateToken.generate(userDetails, user._id);
-    const generateRefreshToken = new GenerateRefreshToken();
-    const refreshToken = await generateRefreshToken.execute(user._id);
-    return { token, user, refreshToken: refreshToken };    
+    const hashedPassword = await bcrypt.hash(password, 10);
+    if (!email || !name || !password) throw new UserInputError('You should complete every input'); 
+    
+    const user = new User({ email, name, password: hashedPassword });    
+    const accessToken = generateAccessToken({ userId: user._id });
+    const refreshToken = await generateRefreshToken({ userId: user._id });
+    
+    await user.save();
+    return { ...user.toObject(), accessToken, refreshToken  };    
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    return error;
   }
 }
 
-export const refreshToken = async (req: any, res: any): Promise<any> => {
+const login = async (_: any, { email, password }, context: any) => {
   try {
-    const refreshToken = await RefreshToken.findById(req.body.refreshToken).populate('user');
-    if (!refreshToken) return res.status(400).json({ error: 'RefreshToken not found!' });
-    const user: UserModel = refreshToken?.user; 
-    const userDetails = { name: user?.name, role: user?.role}
-    const generateToken = new GenerateToken();
-    const token = generateToken.generate(userDetails, user?._id);
-    if (!!isAfter(new Date(), refreshToken?.expiration)) {
-      const generateRefreshToken = new GenerateRefreshToken();
-      const newRefreshToken = await generateRefreshToken.execute(user._id);
-      return res.status(201).json({ token, refreshToken: newRefreshToken, user });
-    }    
-    return res.status(201).send({ token, refreshToken: refreshToken._id, user });    
+    if (!password) throw new UserInputError('password not provided!');
+    const user: UserModel | null = await User.findOne({ email });
+    const passwordMatch = user && await compare(password, user.password); 
+    if (!user || !passwordMatch) throw new AuthenticationError('user or password incorrect!'); 
+    const accessToken = generateAccessToken({ userId: user._id });
+    const refreshToken = await generateRefreshToken({ userId: user._id });
+
+    return { ...user.toObject(), accessToken, refreshToken };
   } catch (error) {
     console.error(error);
+    return error;
+  }
+};
+
+export const refreshToken = async (parent: any, args: any): Promise<any> => {
+  try {
+    const refreshToken = await RefreshToken.findById(args.refreshToken).populate('user');
+    if (!refreshToken) throw new AuthenticationError('RefreshToken not found!');
+    const user = refreshToken.user as UserModel;
+    const accessToken = generateAccessToken({ userId: user._id });
+    if (!!isAfter(new Date(), refreshToken?.expiration)) {
+      const newRefreshToken = await generateRefreshToken({ userId: user._id });
+      return { accessToken, refreshToken: newRefreshToken, user };
+    }    
+    return { ...user.toObject(), accessToken, refreshToken: refreshToken._id };    
+  } catch (error) {
+    console.error(error);
+    throw new ApolloError('Error to create refreshToken');
   }
 }
 
 export const authQueries = { currentUser };
-export const authMutations = { login };
+export const authMutations = { login, register };

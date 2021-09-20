@@ -1,17 +1,21 @@
 import { withFilter,  } from 'graphql-subscriptions';
 import { $$asyncIterator } from 'iterall';
-import { onFinished, onStart, withStaticFields } from '../../utils/withWatch';
+import { withWatch } from '../../utils/withWatch';
 import { pubsub } from '../../config/redisClient';
 
 export const NEW_USER_ADDED = 'NEW_USER_ADDED';
-export const NEW_USER_CONNECTED = 'NEW_USER_CONNECTED';
+export const NEW_USER_CONNECTED = 'NEW_USER_CONNECTED'
 
 export const userAdded = {
   subscribe: withFilter(
-    () => { 
-      const asyncIterator = pubsub.asyncIterator(NEW_USER_ADDED);
-      withStaticFields(asyncIterator, () => console.log('teste'))
-      return asyncIterator
+    (root, args, context, info) => {
+      // console.log(root, args, context)
+      return pubsub.asyncIterator(NEW_USER_ADDED)
+      // return withWatch(
+      //   pubsub.asyncIterator(NEW_USER_ADDED),
+      //   () => console.log('conexao startada'),
+      //   () => console.log('conexao finalizada')
+      // )
     }, 
     (payload, variables) => true
   )
