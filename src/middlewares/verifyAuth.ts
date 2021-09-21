@@ -1,6 +1,6 @@
 import { verify } from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-express';
-import { getCurrentUser } from '../provider/getCurrentUser';
+import { getCurrentUser } from '../provider/getUser';
 import UserModel from '../models/user/user.model';
 
 export default async function verifyAuth(authToken: string): Promise<UserModel | null> {
