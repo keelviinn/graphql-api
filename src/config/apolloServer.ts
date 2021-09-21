@@ -60,11 +60,9 @@ export default async function startServer() {
   const server = new ApolloServer({
     schema,
     context,
-    plugins: [{
-      async serverWillStart() {
-        return { async drainServer() { subscriptionServer.close(); } };
-      }
-    }],
+    plugins: [
+      { async serverWillStart() { return { async drainServer() { subscriptionServer.close() } } }},
+    ],
   });
 
   const subscriptionServer = SubscriptionServer.create({ 
