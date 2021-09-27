@@ -43,7 +43,7 @@ const login = async (_: any, { email, password }, context: any) => {
   }
 };
 
-export const refreshToken = async (parent: any, args: any): Promise<any> => {
+const refreshToken = async (parent: any, args: any): Promise<any> => {
   try {
     const refreshToken = await RefreshToken.findById(args.refreshToken).populate('user');
     if (!refreshToken) throw new AuthenticationError('RefreshToken not found!');
@@ -61,4 +61,4 @@ export const refreshToken = async (parent: any, args: any): Promise<any> => {
 }
 
 export const authQueries = { currentUser };
-export const authMutations = { login, register };
+export const authMutations = { login, register, refreshToken };

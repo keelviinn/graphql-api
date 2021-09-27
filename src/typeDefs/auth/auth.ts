@@ -39,6 +39,12 @@ const login = `
   ): User
 `;
 
+const refreshToken= `
+  refreshToken(
+    refreshToken: ID! 
+  ): User
+`;
+
 export const authTypeDefs = `
   ${RefreshToken}
   ${Auth}
@@ -52,4 +58,5 @@ export const authQueries = `
 export const authMutations = `
   ${register}
   ${login}
+  ${refreshToken}
 `;
