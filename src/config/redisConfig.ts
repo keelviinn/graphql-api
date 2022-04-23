@@ -1,3 +1,4 @@
 import Redis from 'ioredis';
+import RedisContants from './redisConstants';
 
-export const RedisClient = new Redis(`rediss://:${process.env.REDIS_CACHE_PASSWORD}@${process.env.REDIS_CACHE_HOST}:${process.env.REDIS_CACHE_PORT}`);
+export const RedisClient = new Redis({ ...RedisContants });

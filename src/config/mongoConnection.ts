@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const 
-	ENVIRONMENT = process.env.NODE_ENV,
-	DB: any = process.env.NODE_ENV == 'production' ? process.env.DATABASE_PROD : process.env.DATABASE_DEV;
+	ENVIRONMENT = process.env.ENVIRONMENT,
+	DB: any = process.env.ENVIRONMENT == 'production' ? process.env.DATABASE_PROD : process.env.DATABASE_DEV;
 
 export default async function startMongoConnection() {  
   await mongoose.connect(DB, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
